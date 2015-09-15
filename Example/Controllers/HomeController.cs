@@ -18,6 +18,16 @@ namespace Example.Controllers
         [ValidateCapttia()]
         public ActionResult Index(HomeModel model)
         {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Thanks");
+            }
+
+            return View();
+        }
+
+        public ActionResult Thanks()
+        {
             return View();
         }
     }

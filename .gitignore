@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Capttia/bin
+/Capttia/obj
+/Example/bin
+/Example/obj
+/Example/Web.Release.config
+/Example/Web.Debug.config
+/Example/Project_Readme.html
+/Example/Example.csproj.user
+/packages

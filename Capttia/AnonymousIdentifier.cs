@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Web.Security;
+using System.Web;
 
 namespace Fenton.Capttia
 {
     public static class AnonymousIdentifier
     {
-        /// <summary>
-        /// <para>The <c>SetIdentifier</c> method generates an Anonymous ID if one isn't set.</para>
-        /// <para>Add the following code to your Global.asax code file:</para>
-        /// <example>
-        /// <code>public void AnonymousIdentification_Creating(object sender, AnonymousIdentificationEventArgs e)
-        /// {
-        ///     AnonymousIdentifier.SetIdentifier(e);
-        /// }</code>
-        /// </example>
-        /// </summary>
-        /// <param name="eventArgs">A <see cref="AnonymousIdentificationEventArgs"/> event.</param>
-        public static void SetIdentifier(AnonymousIdentificationEventArgs eventArgs)
+        private const string SEPARATOR = "ಠ⌣ಠ";
+
+        public static string GetContextId(HttpContextBase context)
         {
-            if (eventArgs.AnonymousID == null)
+            var browserId = new BrowserId(context);
+            return $"C{DateTime.UtcNow.Ticks}{SEPARATOR}{browserId.GetId()}";
+        }
+
+        public static string GetBrowserStampFromId(string id)
+        {
+            if (id.Contains(SEPARATOR))
             {
-                eventArgs.AnonymousID = "CAPTTIA_ID_" + DateTime.UtcNow.Ticks;
+                id = id.Substring(id.IndexOf(SEPARATOR) + SEPARATOR.Length);
             }
+
+            return id;
         }
     }
 }

@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousIdentifier.cs" />
+    <Compile Include="BrowserId.cs" />
     <Compile Include="CapttiaHtmlExtensions.cs" />
     <Compile Include="Internals\Configuration.cs" />
     <Compile Include="Internals\Encryption.cs" />

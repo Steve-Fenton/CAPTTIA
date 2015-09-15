@@ -1,22 +1,28 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Fenton.Capttia
 {
-    internal static class Encryption
+    internal class Encryption
     {
         // This constant string is used as a "salt" value for the PasswordDeriveBytes function calls.
         // This size of the IV (in bytes) must = (keysize / 8).  Default keysize is 256, so the IV must be
         // 32 bytes long.  Using a 16 character string here gives us 32 bytes when converted to a byte array.
-        private const string Salt = "bD84Ae8g7f15cF9B";
-        private static readonly byte[] initVectorBytes = Encoding.ASCII.GetBytes(Salt);
+        private readonly byte[] initVectorBytes;
+
+        public Encryption()
+        {
+            var config = ConfigurationManager.GetSection("capttia") as CapttiaSection;
+            initVectorBytes = Encoding.ASCII.GetBytes(config.Salt);
+        }
 
         // This constant is used to determine the keysize of the encryption algorithm.
-        private const int keysize = 256;
+        private int keysize = 256;
 
-        internal static string Encrypt(string plainText, string passPhrase)
+        internal string Encrypt(string plainText, string passPhrase)
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             using (var password = new PasswordDeriveBytes(passPhrase, null))
@@ -42,7 +48,7 @@ namespace Fenton.Capttia
             }
         }
 
-        internal static string Decrypt(string cipherText, string passPhrase)
+        internal string Decrypt(string cipherText, string passPhrase)
         {
             byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
             using (var password = new PasswordDeriveBytes(passPhrase, null))

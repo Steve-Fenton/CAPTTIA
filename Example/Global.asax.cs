@@ -15,10 +15,5 @@ namespace Example
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
-
-        public void AnonymousIdentification_Creating(object sender, AnonymousIdentificationEventArgs e)
-        {
-            AnonymousIdentifier.SetIdentifier(e);
-        }
     }
 }

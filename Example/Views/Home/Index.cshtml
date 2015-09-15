@@ -1,0 +1,21 @@
+﻿@model  Example.Models.HomeModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>About You</legend>
+        @Html.ValidationSummary()
+        <div>
+            @Html.LabelFor(m => m.Name, "Enter your name:", new { })
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+        <div>
+            @Html.Capttia(Request)
+            <button>Submit</button>
+        </div>
+    </fieldset>
+
+}

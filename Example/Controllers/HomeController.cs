@@ -26,9 +26,29 @@ namespace Example.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateCapttia()]
+        public ActionResult Ajax(HomeModel model)
+        {
+            var response = new AjaxResponse();
+            if (ModelState.IsValid)
+            {
+                response.Message = "Thanks!";
+                return Json(response);
+            }
+
+            response.Message = "No luck!";
+            return Json(response);
+        }
+
         public ActionResult Thanks()
         {
             return View();
         }
+    }
+
+    public class AjaxResponse
+    {
+        public string Message { get; set; }
     }
 }

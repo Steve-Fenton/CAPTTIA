@@ -13,9 +13,39 @@
             @Html.TextBoxFor(m => m.Name)
         </div>
         <div>
+            <label>Use AJAX? <input type="checkbox" id="ajax" /></label>
+        </div>
+        <div>
             @Html.Capttia(Request)
             <button>Submit</button>
         </div>
     </fieldset>
+}
 
+@section script {
+    <script>
+        $(document).ready(function () {
+            $(document.forms[0]).submit(function (e) {
+                $ajaxCheckbox = $('#ajax');
+                if ($ajaxCheckbox.is(':checked')) {
+                    e.preventDefault();
+
+                    $form = $(this);
+
+                    $.ajax({
+                        url: '/Home/Ajax',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: $form.serialize(),
+                        success: function (data) {
+                            alert(data.Message);
+                        }
+                    });
+
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
 }

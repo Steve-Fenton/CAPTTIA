@@ -6,14 +6,14 @@ namespace Fenton.Capttia
     {
         private string Browser { get; set; }
 
-        private string Accepts { get; set; }
+        private string UserHostAddress { get; set; }
 
         private string Screen { get; set; }
 
         public BrowserId(HttpContext context)
         {
             Browser = context.Request.Browser.Browser;
-            Accepts = string.Join("#", context.Request.AcceptTypes);
+            UserHostAddress = string.Join("#", context.Request.UserHostAddress);
             Screen = string.Format("#{0}{1}{2}",
                 context.Request.Browser.ScreenBitDepth,
                 context.Request.Browser.ScreenPixelsWidth,
@@ -23,7 +23,7 @@ namespace Fenton.Capttia
         public BrowserId(HttpContextBase context)
         {
             Browser = context.Request.Browser.Browser;
-            Accepts = string.Join("#", context.Request.AcceptTypes);
+            UserHostAddress = string.Join("#", context.Request.UserHostAddress);
             Screen = string.Format("#{0}{1}{2}",
                 context.Request.Browser.ScreenBitDepth,
                 context.Request.Browser.ScreenPixelsWidth,
@@ -32,7 +32,7 @@ namespace Fenton.Capttia
 
         public string GetId()
         {
-            return Browser + Accepts + Screen;
+            return Browser + UserHostAddress + Screen;
         }
     }
 }

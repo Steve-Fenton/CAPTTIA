@@ -1,0 +1,21 @@
+﻿@model  Example.Models.HomeModel
+@{
+    Layout = null;
+}
+<form method="post" action="/Home/Index">
+    <fieldset>
+        <legend>This form was loaded with AJAX</legend>
+        @Html.ValidationSummary()
+        <div>
+            @Html.LabelFor(m => m.Name, "Enter your name:", new { })
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+        <div>
+            <label>Use AJAX? <input type="checkbox" name="ajax" /></label>
+        </div>
+        <div>
+            @Html.Capttia(Request)
+            <button>Submit</button>
+        </div>
+    </fieldset>
+</form>

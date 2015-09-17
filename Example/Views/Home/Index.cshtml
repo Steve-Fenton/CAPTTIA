@@ -3,30 +3,35 @@
     ViewBag.Title = "Home Page";
 }
 
-@using (Html.BeginForm())
-{
-    <fieldset>
-        <legend>About You</legend>
-        @Html.ValidationSummary()
-        <div>
-            @Html.LabelFor(m => m.Name, "Enter your name:", new { })
-            @Html.TextBoxFor(m => m.Name)
-        </div>
-        <div>
-            <label>Use AJAX? <input type="checkbox" id="ajax" /></label>
-        </div>
-        <div>
-            @Html.Capttia(Request)
-            <button>Submit</button>
-        </div>
-    </fieldset>
-}
+<div id="form-container">
+    <form method="post" action="~/Home/Index" id="main-form">
+        <fieldset>
+            <legend>This is a static form</legend>
+            @Html.ValidationSummary()
+            <div>
+                @Html.LabelFor(m => m.Name, "Enter your name:", new { })
+                @Html.TextBoxFor(m => m.Name)
+            </div>
+            <div>
+                <label>Use AJAX? <input type="checkbox" name="ajax" /></label>
+            </div>
+            <div>
+                @Html.Capttia(Request)
+                <button>Submit</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<button id="load-a-form">
+    Replace form with dynamically loaded form.
+</button>
 
 @section script {
     <script>
         $(document).ready(function () {
-            $(document.forms[0]).submit(function (e) {
-                $ajaxCheckbox = $('#ajax');
+            $(document).on('submit', 'form', function (e) {
+                $ajaxCheckbox = $('input[name=ajax]', this);
                 if ($ajaxCheckbox.is(':checked')) {
                     e.preventDefault();
 
@@ -45,6 +50,12 @@
                     return false;
                 }
                 return true;
+            });
+
+            $('#load-a-form').click(function () {
+                $.get('/Home/DynamicForm', function (data) {
+                    $('#form-container').html(data);
+                })
             });
         });
     </script>

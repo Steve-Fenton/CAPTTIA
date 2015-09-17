@@ -4,11 +4,14 @@
     {
         public ScriptIds(string moduleName)
         {
+            InstanceId = ShortGuid.New();
             TokenId = moduleName;
             ScriptId = $"{moduleName}Script";
             HoneyPotInputId = $"{moduleName}Value";
-            HoneyPotContainerId = $"{moduleName}Input";
+            HoneyPotContainerId = $"{moduleName}Input{InstanceId}";
         }
+
+        public string InstanceId { get; private set; }
 
         public string TokenId { get; private set; }
 

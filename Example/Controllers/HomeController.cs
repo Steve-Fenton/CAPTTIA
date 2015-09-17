@@ -8,9 +8,11 @@ namespace Example.Controllers
     {
         public ActionResult Index()
         {
-            var id = Request.AnonymousID;
-            ViewBag.Id = id;
+            return View();
+        }
 
+        public ActionResult DynamicForm()
+        {
             return View();
         }
 

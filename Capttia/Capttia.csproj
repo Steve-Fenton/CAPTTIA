@@ -84,6 +84,7 @@
     <Compile Include="Internals\Configuration.cs" />
     <Compile Include="Internals\Encryption.cs" />
     <Compile Include="Internals\JavaScript.cs" />
+    <Compile Include="Internals\ShortGuid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptIds.cs" />
     <Compile Include="ValidateCapittia.cs" />

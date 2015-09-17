@@ -17,6 +17,7 @@ namespace System.Web.Mvc.Html
         {
             var config = ConfigurationManager.GetSection("capttia") as CapttiaSection;
             var encyption = new Encryption();
+            var ids = new ScriptIds(config.ModuleName);
 
             var contextId = AnonymousIdentifier.GetContextId(request.RequestContext.HttpContext);
 
@@ -27,8 +28,6 @@ namespace System.Web.Mvc.Html
             // Place it on the form
             var formId = encyption.Encrypt(contextId, config.PassPhrase);
             var token = JavaScript.EncodeForSingleQuotes(formId);
-
-            var ids = new ScriptIds(config.ModuleName);
 
             return MvcHtmlString.Create(GetHoneyPot(ids) + GetScriptElement(ids, token));
         }

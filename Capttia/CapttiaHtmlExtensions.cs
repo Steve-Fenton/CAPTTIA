@@ -1,5 +1,7 @@
 ﻿using Fenton.Capttia;
 using System.Configuration;
+using System.Text;
+using Yahoo.Yui.Compressor;
 
 namespace System.Web.Mvc.Html
 {
@@ -26,19 +28,53 @@ namespace System.Web.Mvc.Html
             var formId = encyption.Encrypt(contextId, config.PassPhrase);
             var token = JavaScript.EncodeForSingleQuotes(formId);
 
-            return MvcHtmlString.Create("<div id=\"" + config.ModuleName + "Input\"><input type=\"text\" name=\"" + config.ModuleName + "Value\" value=\"\"></div>" +
-                "<script id=\"" + config.ModuleName + "-script\">" +
-                "(function (v, t) {" +
-                "if (!t) t = 'hidden';" +
-                "window.setTimeout(function() {" +
-                "    var newElem = document.createElement('div');" +
-                "    newElem.innerHTML = '<input type=\"' + t + '\" name=\"" + config.ModuleName + "\" value=\"' + v + '\" />';" +
-                "    var elem = document.getElementById('" + config.ModuleName + "-script');" +
-                "    elem.parentNode.appendChild(newElem);" +
-                "    elem.parentNode.removeChild(elem);" +
-                "}, 1000);" +
-                "document.getElementById('" + config.ModuleName + "Input').style.display = 'none';" +
-                "}('" + token + "'));" +
-                "</script>"); }
+            var ids = new ScriptIds(config.ModuleName);
+
+            return MvcHtmlString.Create(GetHoneyPot(ids) + GetScriptElement(ids, token));
+        }
+
+        public static string GetHoneyPot(ScriptIds ids) {
+            return @"<div id=""" + ids.HoneyPotContainerId + @"""><input type=""text"" name=""" + ids.HoneyPotInputId + @""" value=""""></div>";
+        }
+
+        public static string GetScriptElement(ScriptIds ids, string token)
+        {
+            return @"<script id=""" + ids.ScriptId + @""">" + GetScript(ids, token) + "</script>";
+        }
+
+        public static string GetScript(ScriptIds ids, string token)
+        {
+            var script = @"(function (v, t) {
+                if (!t) t = 'hidden';
+                var chk = function () {
+                    var elem = document.getElementById('" + ids.ScriptId + @"');
+                    document.getElementById('" + ids.HoneyPotContainerId + @"').style.display = 'none';
+                    if (elem) {
+                        var newElem = document.createElement('div');
+                        newElem.innerHTML = '<input type=""' + t + '"" name=""" + ids.TokenId + @""" value=""' + v + '"" />';
+                        elem.parentNode.appendChild(newElem);
+                        elem.parentNode.removeChild(elem);
+                    } else {
+                        window.setTimeout(chk, 1000);
+                    }
+                };
+                window.setTimeout(chk, 1000);
+                document.getElementById('" + ids.HoneyPotContainerId + @"').style.display = 'none';
+                }('" + token + @"'));";
+
+            var compressor = new JavaScriptCompressor
+            {
+                Encoding = Encoding.UTF8,
+                DisableOptimizations = false,
+                ObfuscateJavascript = true,
+                PreserveAllSemicolons = true,
+                IgnoreEval = true,
+                ThreadCulture = Globalization.CultureInfo.InvariantCulture
+            };
+
+            var example = compressor.Compress(script);
+
+            return example;
+        }
     }
 }

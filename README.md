@@ -4,6 +4,10 @@ CAPTTIA stands for "Completely Automated Public Turing test That Isn't Annoying"
 
 Unlike a traditional CAPTCHA, which asks the user to decode text from an image or solve a puzzle, CAPTTIA is invisible to end users.
 
+## NuGet
+
+    PM> Install-Package Fenton.Capttia 
+
 ## Implementing CAPTTIA
 
 CAPTTIA can be easily included in your MVC project. Here are the changes you need to wire it up.

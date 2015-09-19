@@ -16,17 +16,17 @@ namespace System.Web.Mvc.Html
         public static MvcHtmlString Capttia(this HtmlHelper html, HttpRequestBase request)
         {
             var config = ConfigurationManager.GetSection("capttia") as CapttiaSection;
-            var encyption = new Encryption();
+            var encryption = new Encryption();
             var ids = new ScriptIds(config.ModuleName);
 
-            var contextId = AnonymousIdentifier.GetContextId(request.RequestContext.HttpContext);
+            string contextId = GetContextId(request, config, encryption);
 
             // Place it in a cookie
-            var cookieContextId = encyption.Encrypt(contextId, config.PassPhraseB);
+            var cookieContextId = encryption.Encrypt(contextId, config.PassPhraseB);
             request.RequestContext.HttpContext.Response.SetCookie(new HttpCookie(config.CookieName, cookieContextId));
 
             // Place it on the form
-            var formId = encyption.Encrypt(contextId, config.PassPhrase);
+            var formId = encryption.Encrypt(contextId, config.PassPhrase);
             var token = JavaScript.EncodeForSingleQuotes(formId);
 
             return MvcHtmlString.Create(GetHoneyPot(ids) + GetScriptElement(ids, token));
@@ -54,10 +54,10 @@ namespace System.Web.Mvc.Html
                         elem.parentNode.appendChild(newElem);
                         elem.parentNode.removeChild(elem);
                     } else {
-                        window.setTimeout(chk, 1000);
+                        window.setTimeout(chk, 500);
                     }
                 };
-                window.setTimeout(chk, 1000);
+                window.setTimeout(chk, 500);
                 document.getElementById('" + ids.HoneyPotContainerId + @"').style.display = 'none';
                 }('" + token + @"'));";
 
@@ -74,6 +74,30 @@ namespace System.Web.Mvc.Html
             var example = compressor.Compress(script);
 
             return example;
+        }
+
+        private static string GetContextId(HttpRequestBase request, CapttiaSection config, Encryption encryption)
+        {
+            var contextId = AnonymousIdentifier.GetContextId(request.RequestContext.HttpContext);
+
+            // Check for existing cookie
+            var existingCookie = request.Cookies[config.CookieName];
+            if (existingCookie != null)
+            {
+                var cookieId = existingCookie.Value;
+                if (!string.IsNullOrWhiteSpace(cookieId))
+                {
+                    var decryptedCookieId = encryption.Decrypt(cookieId, config.PassPhraseB);
+                    var cookieBrowserId = AnonymousIdentifier.GetBrowserStampFromId(decryptedCookieId);
+                    var contextBrowserId = AnonymousIdentifier.GetBrowserStampFromId(contextId);
+                    if (cookieBrowserId.Equals(contextBrowserId))
+                    {
+                        contextId = decryptedCookieId;
+                    }
+                }
+            }
+
+            return contextId;
         }
     }
 }

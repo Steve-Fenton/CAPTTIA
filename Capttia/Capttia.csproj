@@ -78,15 +78,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnonymousIdentifier.cs" />
-    <Compile Include="BrowserId.cs" />
+    <Compile Include="Internals\AnonymousIdentifier.cs" />
+    <Compile Include="Internals\BrowserId.cs" />
     <Compile Include="CapttiaHtmlExtensions.cs" />
     <Compile Include="Internals\Configuration.cs" />
     <Compile Include="Internals\Encryption.cs" />
     <Compile Include="Internals\JavaScript.cs" />
     <Compile Include="Internals\ShortGuid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptIds.cs" />
+    <Compile Include="Internals\ScriptIds.cs" />
     <Compile Include="ValidateCapittia.cs" />
   </ItemGroup>
   <ItemGroup>

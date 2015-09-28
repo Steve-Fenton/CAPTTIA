@@ -49,7 +49,7 @@ namespace Fenton.Capttia
             }
         }
 
-        [ConfigurationProperty("ErrorMessage", DefaultValue = "The user does not appear to be human.")]
+        [ConfigurationProperty("ErrorMessage", DefaultValue = "Please ensure cookies are enabled in your browser.")]
         public string ErrorMessage
         {
             get

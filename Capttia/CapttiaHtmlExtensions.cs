@@ -23,7 +23,7 @@ namespace System.Web.Mvc.Html
 
             // Place it in a cookie
             var cookieContextId = encryption.Encrypt(contextId, config.PassPhraseB);
-            request.RequestContext.HttpContext.Response.SetCookie(new HttpCookie(config.CookieName, cookieContextId));
+            request.RequestContext.HttpContext.Response.SetCookie(new HttpCookie(config.CookieName, cookieContextId) { HttpOnly = true });
 
             // Place it on the form
             var formId = encryption.Encrypt(contextId, config.PassPhrase);
@@ -32,7 +32,8 @@ namespace System.Web.Mvc.Html
             return MvcHtmlString.Create(GetHoneyPot(ids) + GetScriptElement(ids, token));
         }
 
-        public static string GetHoneyPot(ScriptIds ids) {
+        public static string GetHoneyPot(ScriptIds ids)
+        {
             return @"<div id=""" + ids.HoneyPotContainerId + @"""><input type=""text"" name=""" + ids.HoneyPotInputId + @""" value=""""></div>";
         }
 

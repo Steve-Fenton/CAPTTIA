@@ -2,7 +2,7 @@
 
 namespace Fenton.Capttia
 {
-    internal class JavaScript
+    internal static class JavaScript
     {
         internal static string EncodeForSingleQuotes(string s)
         {

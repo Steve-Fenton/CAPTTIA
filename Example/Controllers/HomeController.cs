@@ -17,25 +17,25 @@ namespace Example.Controllers
         }
 
         [HttpPost]
-        [ValidateCapttia()]
+        [ValidateCapttia]
         public ActionResult Index(HomeModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Thanks");
+                return RedirectToAction("Thanks", new { name = model.Name });
             }
 
             return View();
         }
 
         [HttpPost]
-        [ValidateCapttia()]
+        [ValidateCapttia]
         public ActionResult Ajax(HomeModel model)
         {
             var response = new AjaxResponse();
             if (ModelState.IsValid)
             {
-                response.Message = "Thanks!";
+                response.Message = $"Thanks {model.Name}!";
                 return Json(response);
             }
 
@@ -43,9 +43,9 @@ namespace Example.Controllers
             return Json(response);
         }
 
-        public ActionResult Thanks()
+        public ActionResult Thanks(string name)
         {
-            return View();
+            return View("Thanks", name);
         }
     }
 

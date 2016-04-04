@@ -17,7 +17,7 @@ namespace Fenton.Capttia
         {
             if (id.Contains(SEPARATOR))
             {
-                id = id.Substring(id.IndexOf(SEPARATOR) + SEPARATOR.Length);
+                id = id.Substring(id.IndexOf(SEPARATOR, StringComparison.InvariantCultureIgnoreCase) + SEPARATOR.Length);
             }
 
             return id;

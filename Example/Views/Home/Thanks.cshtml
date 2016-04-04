@@ -1,6 +1,7 @@
-﻿@{
-    ViewBag.Title = "Thanks";
+﻿@model string
+@{
+    ViewBag.Title = "Thanks " + Model;
 }
 
-<h2>Thanks</h2>
+<h2>Thanks @Model</h2>
 <p>We got your message.</p>

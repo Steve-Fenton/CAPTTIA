@@ -6,7 +6,7 @@
         {
             InstanceId = ShortGuid.New();
             TokenId = moduleName;
-            ScriptId = $"{moduleName}Script";
+            ScriptId = $"{moduleName}Script{InstanceId}";
             HoneyPotInputId = $"{moduleName}Value";
             HoneyPotContainerId = $"{moduleName}Input{InstanceId}";
         }

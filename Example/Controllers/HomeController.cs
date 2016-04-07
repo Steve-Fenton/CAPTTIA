@@ -43,9 +43,10 @@ namespace Example.Controllers
             return Json(response);
         }
 
+        [Route("Home/Thanks/{name}")]
         public ActionResult Thanks(string name)
         {
-            return View("Thanks", name);
+            return View("Thanks", (object)name);
         }
     }
 

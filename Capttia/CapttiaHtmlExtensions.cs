@@ -1,5 +1,6 @@
 ﻿using Fenton.Capttia;
 using System.Configuration;
+using System.Security.Cryptography;
 using System.Text;
 using Yahoo.Yui.Compressor;
 
@@ -88,12 +89,19 @@ namespace System.Web.Mvc.Html
                 var cookieId = existingCookie.Value;
                 if (!string.IsNullOrWhiteSpace(cookieId))
                 {
-                    var decryptedCookieId = encryption.Decrypt(cookieId, config.PassPhraseB);
-                    var cookieBrowserId = AnonymousIdentifier.GetBrowserStampFromId(decryptedCookieId);
-                    var contextBrowserId = AnonymousIdentifier.GetBrowserStampFromId(contextId);
-                    if (cookieBrowserId.Equals(contextBrowserId))
+                    try
                     {
-                        contextId = decryptedCookieId;
+                        var decryptedCookieId = encryption.Decrypt(cookieId, config.PassPhraseB);
+                        var cookieBrowserId = AnonymousIdentifier.GetBrowserStampFromId(decryptedCookieId);
+                        var contextBrowserId = AnonymousIdentifier.GetBrowserStampFromId(contextId);
+                        if (cookieBrowserId.Equals(contextBrowserId))
+                        {
+                            contextId = decryptedCookieId;
+                        }
+                    }
+                    catch (CryptographicException)
+                    {
+                        request.Cookies[config.CookieName].Expires = DateTime.Today.AddDays(-1);
                     }
                 }
             }

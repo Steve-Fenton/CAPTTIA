@@ -24,7 +24,7 @@ namespace System.Web.Mvc.Html
 
             // Place it in a cookie
             var cookieContextId = encryption.Encrypt(contextId, config.PassPhraseB);
-            request.RequestContext.HttpContext.Response.SetCookie(new HttpCookie(config.CookieName, cookieContextId) { HttpOnly = true });
+            request.RequestContext.HttpContext.Response.SetCookie(new HttpCookie(config.CookieName, cookieContextId) { HttpOnly = true, SameSite = SameSiteMode.Lax });
 
             // Place it on the form
             var formId = encryption.Encrypt(contextId, config.PassPhrase);
@@ -70,7 +70,7 @@ namespace System.Web.Mvc.Html
                 ObfuscateJavascript = true,
                 PreserveAllSemicolons = true,
                 IgnoreEval = true,
-                ThreadCulture = Globalization.CultureInfo.InvariantCulture
+                ThreadCulture = System.Globalization.CultureInfo.InvariantCulture
             };
 
             var example = compressor.Compress(script);
